@@ -34,7 +34,7 @@ public class UserMealsUtil {
 
         Map<LocalDate, Integer> map = new TreeMap<>();
         for (UserMeal meal : mealList) {
-            map.merge(meal.getDateTime().toLocalDate(), meal.getCalories(), (a, b) -> a + b);
+            map.merge(meal.getDateTime().toLocalDate(), meal.getCalories(), Integer::sum);
         }
 
         List<UserMealWithExceed> list = new ArrayList<>();
