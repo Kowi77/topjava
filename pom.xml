@@ -74,6 +74,13 @@
             <version>1.2</version>
         </dependency>
 
+        <!--MysQL-->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.36</version>
+        </dependency>
+
     </dependencies>
 
 
