@@ -14,56 +14,35 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class MealsDaoImplInMemory implements MealsDao{
 
-    private static AtomicInteger id;
-    private static Map<Integer, Meal> mealsMap; //DB imitation field
-    private  static List<Meal> meals = Arrays.asList(   //Initial values
-            new Meal(LocalDateTime.of(2017, Month.MAY, 30, 10, 0), "Конфеты", 500),
-            new Meal(LocalDateTime.of(2017, Month.MAY, 30, 13, 0), "Котлеты", 1000),
-            new Meal(LocalDateTime.of(2017, Month.MAY, 30, 20, 0), "Ужин", 490),
-            new Meal(LocalDateTime.of(2017, Month.MAY, 31, 10, 0), "Завтрак", 1000),
-            new Meal(LocalDateTime.of(2017, Month.MAY, 31, 13, 0), "Обед", 500),
-            new Meal(LocalDateTime.of(2017, Month.MAY, 31, 20, 0), "Ужин", 510)
-    );
-
-    public MealsDaoImplInMemory() {
-        //DB hardcode filling
-        id = new AtomicInteger();
+    private static AtomicInteger id = new AtomicInteger();
+    private static Map<Integer, Meal> mealsMap = new ConcurrentHashMap<>(); //DB imitation field
+    static{
         id.set(1);
-        mealsMap = new ConcurrentHashMap<>();
-        for(Meal meal: meals){
-            mealsMap.put(id.get(), meal);
-            meal.setId(id.getAndIncrement());
-        }
+        mealsMap.put(id.get(), new Meal(id.getAndIncrement(), LocalDateTime.of(2017, Month.MAY, 30, 10, 0), "Конфеты", 500));
+        mealsMap.put(id.get(), new Meal(id.getAndIncrement(), LocalDateTime.of(2017, Month.MAY, 30, 13, 0), "Котлеты", 1000));
+        mealsMap.put(id.get(), new Meal(id.getAndIncrement(), LocalDateTime.of(2017, Month.MAY, 30, 20, 0), "Ужин", 490));
+        mealsMap.put(id.get(), new Meal(id.getAndIncrement(), LocalDateTime.of(2017, Month.MAY, 31, 10, 0), "Завтрак", 1000));
+        mealsMap.put(id.get(), new Meal(id.getAndIncrement(), LocalDateTime.of(2017, Month.MAY, 31, 13, 0), "Обед", 500));
+        mealsMap.put(id.get(), new Meal(id.getAndIncrement(), LocalDateTime.of(2017, Month.MAY, 31, 20, 0), "Ужин", 510));
     }
 
     @Override
-    public synchronized void addMeal(Meal meal) {
-        mealsMap.put(id.get(), meal);
-        meal.setId(id.getAndIncrement());
+    public void add (LocalDateTime dateTime, String desription, Integer calories) {
+        mealsMap.put(id.get(), new Meal(id.getAndIncrement(), dateTime, desription, calories));
     }
 
     @Override
-    public void deleteMeal(int mealId) {
-        try {
-            mealsMap.remove(mealId);
-        } catch (Exception e) {
-        }
-    }
+    public void delete(int mealId) { mealsMap.remove(mealId); }
 
     @Override
-    public synchronized void updateMeal(Meal meal) {
-        mealsMap.put(meal.getId(), meal);
-    }
+    public void update(Integer id, LocalDateTime dateTime, String desription, Integer calories) {
+        mealsMap.put(id,new Meal(id, dateTime, desription, calories) ); }
 
     @Override
-    public synchronized List<Meal> getAllMeals() {
+    public List<Meal> getAll() {
         return  new ArrayList(mealsMap.values());
     }
 
     @Override
-    public synchronized Meal getMealById(int mealId) {
-        if (mealsMap.containsKey(mealId))
-                return mealsMap.get(mealId);
-        else return null;
-    }
+    public Meal getById(int mealId) { return mealsMap.get(mealId); }
 }

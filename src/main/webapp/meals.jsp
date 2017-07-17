@@ -58,7 +58,6 @@
 <table class="tg">
     <tr>
         <th width="40">N</th>
-        <th width="40">ID</th>
         <th width="120">DESCRIPTION</th>
         <th width="100">DATE</th>
         <th width="60">CALORIES</th>
@@ -67,12 +66,10 @@
 
     </tr>
     <c:forEach items="${mealsWithExceed}" var="meal">
-        <c:if test="${meal.exceed}"><tr class="exceed"></c:if> <%--fix to ternar--%>
-        <c:if test="${!meal.exceed}"><tr class="notExceed"></c:if>
+        <tr class="${meal.isExceed()?'exceed':'notExceed'}">
             <td>${mealsWithExceed.indexOf(meal) + 1}</td>
-            <td>${meal.id}</td>
             <td>${meal.description}</td>
-            <td>${meal.dateTime}</td> <%-- where this to be formatted???--%>
+            <td>${meal.dateTime.toLocalDate()} ${meal.dateTime.toLocalTime()}</td> <%-- fix to normal formatter--%>
             <td>${meal.calories}</td>
             <td><a href="meals?action=edit&mealId=<c:out value="${meal.id}"/>">Edit</a></td>
             <td><a href="meals?action=delete&mealId=<c:out value="${meal.id}"/>">Delete</a></td>
@@ -80,20 +77,16 @@
     </c:forEach>
 </table>
 </c:if>
-
-<h3> Add new meal </h3>
+<h3> Add/edit meal </h3>
 
 <form method="POST" action='meals' name="formAddMeal">
-    Date and Time (YYYY-MM-DD HH:MM): <input
-        type="text" name="dateTime"
-        value="<c:out value="${meal.dateTime}" />" /> <br />
-    Description : <input
-        type="text" name="description"
-        value="<c:out value="${meal.description}" />" /> <br />
-    Calories : <input
-        type="text" name="calories"
-        value="<c:out value="${meal.calories}" />" /> <br />
-        <input type="submit" value="Add meal" />
+    <c:if test="${!empty mealForEdit}">
+        <input style="display: none" type="text" name="id" readonly="true" size="10" value="<c:out value="${mealForEdit.id}" />" />
+    </c:if>
+    <input type="text" name="dateTime" value="<c:out value="${mealForEdit.dateTime.toLocalDate()} ${mealForEdit.dateTime.toLocalTime()}" />" />  Date and Time (YYYY-MM-DD HH:MM)<br />
+    <input type="text" name="description" value="<c:out value="${mealForEdit.description}" />" />  Description <br />
+    <input type="text" name="calories" value="<c:out value="${mealForEdit.calories}" />" /> Calories <br />
+    <input type="submit" value="${!empty mealForEdit?'Edit meal':'Add meal'}" />
 </form>
 </body>
 </html>
