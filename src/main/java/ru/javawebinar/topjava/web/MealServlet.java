@@ -36,7 +36,6 @@ public class MealServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         if (request.getParameter("id") == null ){
-            System.out.println(request.getParameter("id"));
             dao.add(LocalDateTime.parse(request.getParameter("dateTime"), formatter), request.getParameter("description"),Integer.parseInt(request.getParameter("calories")));
             log.debug("Meal was added");}
         else {
