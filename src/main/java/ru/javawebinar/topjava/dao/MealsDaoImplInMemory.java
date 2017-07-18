@@ -29,8 +29,8 @@ public class MealsDaoImplInMemory implements MealsDao{
 
     @Override
     public void add (Meal meal) {
-        meal.setId(id.get());
-        mealsMap.put(id.getAndIncrement(), meal);
+        meal.setId(id.getAndIncrement());
+        mealsMap.put(meal.getId(), meal);
     }
 
     @Override
