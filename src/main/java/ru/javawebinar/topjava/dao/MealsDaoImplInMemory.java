@@ -14,9 +14,10 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class MealsDaoImplInMemory implements MealsDao{
 
-    private static AtomicInteger id = new AtomicInteger();
-    private static Map<Integer, Meal> mealsMap = new ConcurrentHashMap<>(); //DB imitation field
-    static{
+    private AtomicInteger id = new AtomicInteger();
+    private Map<Integer, Meal> mealsMap = new ConcurrentHashMap<>(); //DB imitation field
+
+    public MealsDaoImplInMemory() {
         id.set(1);
         mealsMap.put(id.get(), new Meal(id.getAndIncrement(), LocalDateTime.of(2017, Month.MAY, 30, 10, 0), "Конфеты", 500));
         mealsMap.put(id.get(), new Meal(id.getAndIncrement(), LocalDateTime.of(2017, Month.MAY, 30, 13, 0), "Котлеты", 1000));
@@ -27,20 +28,20 @@ public class MealsDaoImplInMemory implements MealsDao{
     }
 
     @Override
-    public void add (LocalDateTime dateTime, String desription, Integer calories) {
-        mealsMap.put(id.get(), new Meal(id.getAndIncrement(), dateTime, desription, calories));
+    public void add (Meal meal) {
+        meal.setId(id.get());
+        mealsMap.put(id.getAndIncrement(), meal);
     }
 
     @Override
     public void delete(int mealId) { mealsMap.remove(mealId); }
 
     @Override
-    public void update(Integer id, LocalDateTime dateTime, String desription, Integer calories) {
-        mealsMap.put(id,new Meal(id, dateTime, desription, calories) ); }
+    public void update(Meal meal) { mealsMap.put(meal.getId(), meal); }
 
     @Override
     public List<Meal> getAll() {
-        return  new ArrayList(mealsMap.values());
+        return  new ArrayList<>(mealsMap.values());
     }
 
     @Override
