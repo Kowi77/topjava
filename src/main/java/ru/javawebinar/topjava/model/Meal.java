@@ -1,10 +1,13 @@
 package ru.javawebinar.topjava.model;
 
+import ru.javawebinar.topjava.AuthorizedUser;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-public class Meal {
+public class Meal extends BaseEntity {
+
     private Integer id;
 
     private final LocalDateTime dateTime;
@@ -12,6 +15,8 @@ public class Meal {
     private final String description;
 
     private final int calories;
+
+    private final int userId = 1;
 
     public Meal(LocalDateTime dateTime, String description, int calories) {
         this(null, dateTime, description, calories);
@@ -52,6 +57,9 @@ public class Meal {
     public LocalTime getTime() {
         return dateTime.toLocalTime();
     }
+
+    public int getUserId() { return userId; }
+    public int setUserId() { return userId; }
 
     public boolean isNew() {
         return id == null;
