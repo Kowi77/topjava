@@ -18,7 +18,7 @@ import java.util.Collection;
 import static ru.javawebinar.topjava.UserTestData.ADMIN;
 import static ru.javawebinar.topjava.UserTestData.USER;
 
-@ContextConfiguration("classpath:spring/spring-app.xml")
+@ContextConfiguration({"classpath:spring/spring-app.xml","classpath:spring/spring-db.xml"})
 @RunWith(SpringRunner.class)
 public class InMemoryAdminRestControllerSpringTest {
 
@@ -42,6 +42,7 @@ public class InMemoryAdminRestControllerSpringTest {
         Assert.assertEquals(users.size(), 1);
         Assert.assertEquals(users.iterator().next(), ADMIN);
     }
+
 
     @Test(expected = NotFoundException.class)
     public void testDeleteNotFound() throws Exception {
