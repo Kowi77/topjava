@@ -21,7 +21,7 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 //import static ru.javawebinar.topjava.UserTestData.ADMIN;
 //import static ru.javawebinar.topjava.UserTestData.USER;
 
-@ContextConfiguration("classpath:spring/spring-app.xml")
+@ContextConfiguration({"classpath:spring/spring-app.xml", "classpath:spring/mock.xml"})
 @RunWith(SpringRunner.class)
 public class InMemoryAdminRestControllerSpringTest {
 
