@@ -1,7 +1,15 @@
 package ru.javawebinar.topjava.service;
 
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.*;
+import org.junit.runner.Description;
 import org.junit.runner.RunWith;
+import org.junit.runners.model.Statement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -11,10 +19,14 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.Arrays;
+import java.util.logging.FileHandler;
+import java.util.logging.LogRecord;
 
+import static java.util.logging.Level.*;
 import static ru.javawebinar.topjava.MealTestData.*;
 import static ru.javawebinar.topjava.UserTestData.ADMIN_ID;
 import static ru.javawebinar.topjava.UserTestData.USER_ID;
@@ -30,6 +42,53 @@ public class MealServiceTest {
     static {
         SLF4JBridgeHandler.install();
     }
+    private static final Logger log = LoggerFactory.getLogger(MealServiceTest.class);
+
+    private static StringBuilder runtimeLog = new StringBuilder();
+
+    private static FileHandler fileHandler;
+
+    @BeforeClass
+    public static void initFileLogger(){
+        try {
+            fileHandler = new FileHandler("mealtest_log.txt");
+        } catch (IOException e) {
+        }
+    }
+
+    public class WorkTime implements TestRule {
+        @Override
+        public Statement apply(final Statement base, Description description) {
+            return new Statement() {
+                @Override
+                public void evaluate() throws Throwable {
+                    long time = System.nanoTime();
+                    try {
+                        base.evaluate();
+                    } finally {
+                        time = (System.nanoTime() - time)/1000000;
+                        runtimeLog.append(testName.getMethodName() + " was finished at " + time + " ms \n");
+                        fileHandler.publish(new LogRecord(INFO, testName.getMethodName() + " was finished at " + time + " ms \n"));
+                        log.info(testName.getMethodName() + " was finished at " + time + " ms");
+                    }
+                }
+            };
+        }
+    }
+
+    @AfterClass
+    public static void afterClass (){
+        System.out.println(runtimeLog);
+    }
+
+    @Rule
+    public WorkTime rule = new WorkTime();
+
+    @Rule
+    public TestName testName = new TestName();
+
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
     @Autowired
     private MealService service;
@@ -40,8 +99,9 @@ public class MealServiceTest {
         MATCHER.assertCollectionEquals(Arrays.asList(MEAL6, MEAL5, MEAL4, MEAL3, MEAL2), service.getAll(USER_ID));
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test//(expected = NotFoundException.class)
     public void testDeleteNotFound() throws Exception {
+        thrown.expect(NotFoundException.class);
         service.delete(MEAL1_ID, 1);
     }
 
@@ -58,8 +118,9 @@ public class MealServiceTest {
         MATCHER.assertEquals(ADMIN_MEAL1, actual);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test//(expected = NotFoundException.class)
     public void testGetNotFound() throws Exception {
+        thrown.expect(NotFoundException.class);
         service.get(MEAL1_ID, ADMIN_ID);
     }
 
@@ -70,8 +131,9 @@ public class MealServiceTest {
         MATCHER.assertEquals(updated, service.get(MEAL1_ID, USER_ID));
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test//(expected = NotFoundException.class)
     public void testUpdateNotFound() throws Exception {
+        thrown.expect(NotFoundException.class);
         service.update(MEAL1, ADMIN_ID);
     }
 

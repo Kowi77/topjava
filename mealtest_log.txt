@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2017-08-06T12:53:40</date>
+  <millis>1501998820720</millis>
+  <sequence>33</sequence>
+  <level>INFO</level>
+  <thread>1</thread>
+  <message>testDeleteNotFound was finished at 458 ms 
+</message>
+</record>
+<record>
+  <date>2017-08-06T12:53:41</date>
+  <millis>1501998821010</millis>
+  <sequence>54</sequence>
+  <level>INFO</level>
+  <thread>1</thread>
+  <message>testGet was finished at 279 ms 
+</message>
+</record>
+<record>
+  <date>2017-08-06T12:53:41</date>
+  <millis>1501998821197</millis>
+  <sequence>75</sequence>
+  <level>INFO</level>
+  <thread>1</thread>
+  <message>testGetNotFound was finished at 184 ms 
+</message>
+</record>
+<record>
+  <date>2017-08-06T12:53:41</date>
+  <millis>1501998821724</millis>
+  <sequence>105</sequence>
+  <level>INFO</level>
+  <thread>1</thread>
+  <message>testSave was finished at 525 ms 
+</message>
+</record>
+<record>
+  <date>2017-08-06T12:53:41</date>
+  <millis>1501998821894</millis>
+  <sequence>126</sequence>
+  <level>INFO</level>
+  <thread>1</thread>
+  <message>testGetBetween was finished at 168 ms 
+</message>
+</record>
+<record>
+  <date>2017-08-06T12:53:42</date>
+  <millis>1501998822080</millis>
+  <sequence>145</sequence>
+  <level>INFO</level>
+  <thread>1</thread>
+  <message>testUpdateNotFound was finished at 183 ms 
+</message>
+</record>
+<record>
+  <date>2017-08-06T12:53:42</date>
+  <millis>1501998822334</millis>
+  <sequence>175</sequence>
+  <level>INFO</level>
+  <thread>1</thread>
+  <message>testDelete was finished at 252 ms 
+</message>
+</record>
+<record>
+  <date>2017-08-06T12:53:42</date>
+  <millis>1501998822499</millis>
+  <sequence>196</sequence>
+  <level>INFO</level>
+  <thread>1</thread>
+  <message>testGetAll was finished at 161 ms 
+</message>
+</record>
+<record>
+  <date>2017-08-06T12:53:42</date>
+  <millis>1501998822772</millis>
+  <sequence>226</sequence>
+  <level>INFO</level>
+  <thread>1</thread>
+  <message>testUpdate was finished at 271 ms 
+</message>
+</record>
