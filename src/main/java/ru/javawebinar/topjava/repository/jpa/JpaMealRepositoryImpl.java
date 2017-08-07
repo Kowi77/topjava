@@ -26,11 +26,13 @@ public class JpaMealRepositoryImpl implements MealRepository {
     @Override
     @Transactional
     public Meal save(Meal meal, int userId) {
+        if (meal == null)
+            return null;
         meal.setUser(userService.get(userId));
         if (meal.isNew()) {
             em.persist(meal);
             return meal;
-        } else if(em.find(Meal.class, meal.getId()).getUser().getId() == userId){
+        } else if(get(meal.getId(), userId) != null &&  get(meal.getId(), userId).getUser().getId() == userId){
             return em.merge(meal);
         }
         return null;
@@ -48,7 +50,8 @@ public class JpaMealRepositoryImpl implements MealRepository {
     @Override
     public Meal get(int id, int userId) {
         Meal meal = em.find(Meal.class, id);
-        meal = meal.getUser().getId() == userId ? meal : null;
+        if (meal == null || meal.getUser().getId() != userId)
+            return null;
         return meal;
     }
 
@@ -60,7 +63,7 @@ public class JpaMealRepositoryImpl implements MealRepository {
 
     @Override
     public List<Meal> getBetween(LocalDateTime startDate, LocalDateTime endDate, int userId) {
-        return em.createQuery("SELECT m FROM Meal m WHERE m.user.id =:userId AND m.dateTime BETWEEN :startDate AND :endDate ORDER BY m.dateTime DESC")
+        return em.createNamedQuery(Meal.ALL_SORTED_BETWEEN)//"SELECT m FROM Meal m WHERE m.user.id =:userId AND m.dateTime BETWEEN :startDate AND :endDate ORDER BY m.dateTime DESC")
                 .setParameter("userId", userId)
                 .setParameter("startDate", startDate)
                 .setParameter("endDate", endDate)

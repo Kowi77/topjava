@@ -11,13 +11,13 @@ import java.time.LocalTime;
 @NamedQueries(value = {
         @NamedQuery(name = Meal.DELETE, query = "DELETE FROM Meal m WHERE m.id=:id AND m.user.id =:userId"),
         @NamedQuery(name = Meal.ALL_SORTED, query = "SELECT m FROM Meal m WHERE m.user.id =:userId ORDER BY m.dateTime DESC"),
-        //@NamedQuery(name = Meal.ALL_SORTED_BETWEEN, query = "SELECT m FROM Meal m WHERE m.user.id =:userId AND m.datetime BETWEEN :startDate AND :endDate ORDER BY m.dateTime DESC")
+        @NamedQuery(name = Meal.ALL_SORTED_BETWEEN, query = "SELECT m FROM Meal m WHERE m.user.id =:userId AND m.dateTime BETWEEN :startDate AND :endDate ORDER BY m.dateTime DESC")
 })
 @Entity
 @Table(name = "meals", uniqueConstraints = {@UniqueConstraint(columnNames = {"date_time", "user_id"}, name = "meals_unique_user_datetime_idx")})
 public class Meal extends BaseEntity {
     public static final String DELETE = "Meal.delete";
-    //public static final String ALL_SORTED_BETWEEN = "Meal.getBetween";
+    public static final String ALL_SORTED_BETWEEN = "Meal.getBetween";
     public static final String ALL_SORTED = "Meal.getAll";
 
     @Column(name = "date_time", columnDefinition = "timestamp default now()", unique = true)
@@ -33,6 +33,7 @@ public class Meal extends BaseEntity {
     private int calories;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @NotNull
     @JoinColumn(name = "user_id")
     //@JoinTable(name = "users", joinColumns = @JoinColumn(name = "id"))
     private User user;

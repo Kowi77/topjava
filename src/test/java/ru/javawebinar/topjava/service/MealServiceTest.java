@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.FileHandler;
 import java.util.logging.LogRecord;
 
@@ -46,46 +47,34 @@ public class MealServiceTest {
 
     private static StringBuilder runtimeLog = new StringBuilder();
 
-    private static FileHandler fileHandler;
-
-    @BeforeClass
-    public static void initFileLogger(){
-        try {
-            fileHandler = new FileHandler("mealtest_log.txt");
-        } catch (IOException e) {
-        }
+    private static void logInfo(Description description, String status, long nanos) {
+        String message = String.format("Test %s %s, spent %d ms",
+                description.getMethodName(), status, TimeUnit.NANOSECONDS.toMillis(nanos));
+        log.info(message);
+        runtimeLog.append(message + "\n");
     }
 
-    public class WorkTime implements TestRule {
+    @Rule
+    public Stopwatch stopwatch = new Stopwatch() {
+        /*@Override
+        protected void succeeded(long nanos, Description description) {
+            logInfo(description, "succeeded", nanos);
+        }
+
         @Override
-        public Statement apply(final Statement base, Description description) {
-            return new Statement() {
-                @Override
-                public void evaluate() throws Throwable {
-                    long time = System.nanoTime();
-                    try {
-                        base.evaluate();
-                    } finally {
-                        time = (System.nanoTime() - time)/1000000;
-                        runtimeLog.append(testName.getMethodName() + " was finished at " + time + " ms \n");
-                        fileHandler.publish(new LogRecord(INFO, testName.getMethodName() + " was finished at " + time + " ms \n"));
-                        log.info(testName.getMethodName() + " was finished at " + time + " ms");
-                    }
-                }
-            };
+        protected void failed(long nanos, Throwable e, Description description) {
+            logInfo(description, "failed with " + e.getClass().getSimpleName(), nanos);
+        }*/
+        @Override
+        protected void finished(long nanos, Description description) {
+            logInfo(description, "finished", nanos);
         }
-    }
+    };
 
     @AfterClass
     public static void afterClass (){
         System.out.println(runtimeLog);
     }
-
-    @Rule
-    public WorkTime rule = new WorkTime();
-
-    @Rule
-    public TestName testName = new TestName();
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
@@ -99,7 +88,7 @@ public class MealServiceTest {
         MATCHER.assertCollectionEquals(Arrays.asList(MEAL6, MEAL5, MEAL4, MEAL3, MEAL2), service.getAll(USER_ID));
     }
 
-    @Test//(expected = NotFoundException.class)
+    @Test
     public void testDeleteNotFound() throws Exception {
         thrown.expect(NotFoundException.class);
         service.delete(MEAL1_ID, 1);
@@ -118,7 +107,7 @@ public class MealServiceTest {
         MATCHER.assertEquals(ADMIN_MEAL1, actual);
     }
 
-    @Test//(expected = NotFoundException.class)
+    @Test
     public void testGetNotFound() throws Exception {
         thrown.expect(NotFoundException.class);
         service.get(MEAL1_ID, ADMIN_ID);
@@ -131,7 +120,7 @@ public class MealServiceTest {
         MATCHER.assertEquals(updated, service.get(MEAL1_ID, USER_ID));
     }
 
-    @Test//(expected = NotFoundException.class)
+    @Test
     public void testUpdateNotFound() throws Exception {
         thrown.expect(NotFoundException.class);
         service.update(MEAL1, ADMIN_ID);
