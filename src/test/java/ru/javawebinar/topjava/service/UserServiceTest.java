@@ -11,7 +11,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
-import ru.javawebinar.topjava.util.DbPopulator;
+//import ru.javawebinar.topjava.util.DbPopulator;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.util.Arrays;
@@ -36,13 +36,13 @@ public class UserServiceTest {
     @Autowired
     private UserService service;
 
-    @Autowired
-    private DbPopulator dbPopulator;
+   // @Autowired
+   // private DbPopulator dbPopulator;
 
-    @Before
-    public void setUp() throws Exception {
-        dbPopulator.execute();
-    }
+    //@Before
+    //public void setUp() throws Exception {
+    //    dbPopulator.execute();
+   // }
 
     @Test
     public void testCreate() throws Exception {
