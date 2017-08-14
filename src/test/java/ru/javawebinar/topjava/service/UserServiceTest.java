@@ -6,9 +6,18 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.datasource.init.DatabasePopulatorUtils;
+import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.SqlConfig;
+import org.springframework.test.context.jdbc.SqlGroup;
 import org.springframework.test.context.junit4.SpringRunner;
+import ru.javawebinar.topjava.ActiveDbProfileResolver;
+import ru.javawebinar.topjava.Profiles;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 //import ru.javawebinar.topjava.util.DbPopulator;
@@ -18,6 +27,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 
+import static ru.javawebinar.topjava.Profiles.*;
 import static ru.javawebinar.topjava.UserTestData.*;
 
 @ContextConfiguration({
@@ -25,24 +35,21 @@ import static ru.javawebinar.topjava.UserTestData.*;
         "classpath:spring/spring-db.xml"
 })
 @RunWith(SpringRunner.class)
+@Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
+@ActiveProfiles(resolver = ActiveDbProfileResolver.class)
 public class UserServiceTest {
 
     static {
         // Only for postgres driver logging
         // It uses java.util.logging and logged via jul-to-slf4j bridge
         SLF4JBridgeHandler.install();
+        //REPOSITORY_IMPLEMENTATION = DATAJPA;
+        //REPOSITORY_IMPLEMENTATION = JPA;
+        //REPOSITORY_IMPLEMENTATION = JDBC;
     }
 
     @Autowired
     private UserService service;
-
-   // @Autowired
-   // private DbPopulator dbPopulator;
-
-    //@Before
-    //public void setUp() throws Exception {
-    //    dbPopulator.execute();
-   // }
 
     @Test
     public void testCreate() throws Exception {
