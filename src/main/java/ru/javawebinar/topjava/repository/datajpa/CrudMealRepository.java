@@ -13,11 +13,14 @@ import java.util.List;
 
 public interface CrudMealRepository extends JpaRepository<Meal, Integer> {
 
-    @Query("SELECT m FROM Meal m WHERE m.user.id=:userId ORDER BY m.dateTime DESC")
-    List<Meal> findAll(@Param("userId") int userId);
+    List<Meal> findAllByUserIdOrderByDateTimeDesc(int userId);
 
     @Query("SELECT m FROM Meal m WHERE m.user.id=:userId AND m.dateTime BETWEEN :startDate AND :endDate ORDER BY m.dateTime DESC")
-    List<Meal> findBetween(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate, @Param("userId") int userId);
+    List<Meal> findBetween(@Param("userId") int userId, @Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
+
+ /*   List<Meal> findAllByUserIdAndDateTimeBetweenOrderByDateTimeDesc(int userId, LocalDateTime startDate, LocalDateTime endDate);
+
+    С between не справился) Потом еще попробую*/
 
     @Override
     @Transactional
@@ -25,8 +28,7 @@ public interface CrudMealRepository extends JpaRepository<Meal, Integer> {
 
     @Transactional
     @Modifying
-    @Query("DELETE FROM Meal m WHERE m.id=:id AND m.user.id=:userId")
-    int delete(@Param("id") int id, @Param("userId") int userId);
+    int deleteByIdAndUserId(int id, int userId);
 
     @Override
     Meal findOne(Integer integer);
