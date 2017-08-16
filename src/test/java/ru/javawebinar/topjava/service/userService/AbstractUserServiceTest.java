@@ -1,9 +1,14 @@
 package ru.javawebinar.topjava.service.userService;
 
 import org.hamcrest.MatcherAssert;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.Stopwatch;
+import org.junit.runner.Description;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -27,7 +32,9 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.concurrent.TimeUnit;
 
+import static org.slf4j.LoggerFactory.getLogger;
 import static ru.javawebinar.topjava.Profiles.*;
 import static ru.javawebinar.topjava.UserTestData.*;
 
@@ -44,6 +51,36 @@ public abstract class AbstractUserServiceTest {
         // Only for postgres driver logging
         // It uses java.util.logging and logged via jul-to-slf4j bridge
         SLF4JBridgeHandler.install();
+    }
+
+    private static final Logger resultLog = getLogger("result");
+
+    private static StringBuilder results = new StringBuilder();
+
+    @Rule
+    //http:stackoverflow.com/questions/14892125/what-is-the-best-practice-to-determine-the-execution-time-of-the-bussiness-relev
+    public Stopwatch stopwatch = new Stopwatch() {
+        @Override
+        protected void finished(long nanos, Description description) {
+            String result = String.format("%-25s %7d", description.getMethodName(), TimeUnit.NANOSECONDS.toMillis(nanos));
+            results.append(result).append('\n');
+            resultLog.info(result + " ms\n");
+        }
+    };
+
+    static {
+        //needed only for java.util.logging (postgres driver)
+        SLF4JBridgeHandler.install();
+    }
+
+    @AfterClass
+    public static void printResult() {
+        resultLog.info("\n---------------------------------" +
+                "\nTest                 Duration, ms" +
+                "\n---------------------------------\n" +
+                results +
+                "---------------------------------\n");
+        results = new StringBuilder();
     }
 
     @Autowired
