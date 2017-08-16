@@ -33,5 +33,7 @@ public interface CrudMealRepository extends JpaRepository<Meal, Integer> {
     @Override
     Meal findOne(Integer integer);
 
+    @Query("SELECT m FROM Meal m LEFT JOIN FETCH m.user WHERE m.id=:id ORDER BY m.dateTime DESC")
+    Meal findWithUserById(@Param("id") int id);
 
 }

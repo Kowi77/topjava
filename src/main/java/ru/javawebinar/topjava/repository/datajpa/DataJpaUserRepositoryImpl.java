@@ -26,9 +26,7 @@ public class DataJpaUserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User get(int id) {
-        return crudRepository.findOne(id);
-    }
+    public User get(int id) { return crudRepository.findOne(id); }
 
     @Override
     public User getByEmail(String email) {
@@ -38,5 +36,9 @@ public class DataJpaUserRepositoryImpl implements UserRepository {
     @Override
     public List<User> getAll() {
         return crudRepository.findAll(SORT_NAME_EMAIL);
+    }
+
+    public User getWithMeals (int id){
+        return crudRepository.findWithMealsById(id);
     }
 }

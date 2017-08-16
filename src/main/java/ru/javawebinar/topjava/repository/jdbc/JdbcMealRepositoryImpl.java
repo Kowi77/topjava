@@ -97,4 +97,9 @@ public class JdbcMealRepositoryImpl implements MealRepository {
                 return Timestamp.valueOf(dateTime);
             else return dateTime;
         }
+
+    @Override
+    public Meal getWithUser(int id) {
+        return null;
+    }
 }

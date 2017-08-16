@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.User;
 
 import java.util.List;
+import java.util.Optional;
 
 @Transactional(readOnly = true)
 public interface CrudUserRepository extends JpaRepository<User, Integer> {
@@ -29,4 +30,8 @@ public interface CrudUserRepository extends JpaRepository<User, Integer> {
     List<User> findAll(Sort sort);
 
     User getByEmail(String email);
+
+    //Optional<User> findWithMealsById(Integer id); Почему не работает?
+    @Query("SELECT u FROM User u LEFT JOIN FETCH u.meals WHERE u.id=:id")
+    User findWithMealsById(@Param("id") int id);
 }
