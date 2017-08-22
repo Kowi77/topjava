@@ -1,22 +1,28 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fn1" uri="http://topjava.javawebinar.ru/functions" %>
+
 
 <html>
 <head>
     <title>Meal</title>
     <link rel="stylesheet" href="css/style.css">
+    <c:set var="url">${pageContext.request.requestURL}</c:set>
+    <base href="${fn:substring(url, 0, fn:length(url) - fn:length(pageContext.request.requestURI))}${pageContext.request.contextPath}/" />
 </head>
 <body>
 <section>
-    <h3><a href="index.html">Home</a></h3>
-    <h2>${param.action == 'create' ? 'Create meal' : 'Edit meal'}</h2>
+    <h3><a href="meals">Home</a></h3>
+    <h2>${action == 'create' ? 'Create meal' : 'Edit meal'}</h2>
     <hr>
-    <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.Meal" scope="request"/>
-    <form method="post" action="meals">
-        <input type="hidden" name="id" value="${meal.id}">
+    <form method="post" action="meals/save">
+        <jsp:useBean id="meal" scope = "request" class="ru.javawebinar.topjava.model.Meal"/>
+        <input type="hidden" type="number" name="id" value="${meal.id}">
         <dl>
             <dt>DateTime:</dt>
-            <dd><input type="datetime-local" value="${meal.dateTime}" name="dateTime"></dd>
+            <dd><input type="datetime-local" value="${fn1:formatDateTime(meal.dateTime)}" name="dateTime"></dd>
         </dl>
         <dl>
             <dt>Description:</dt>

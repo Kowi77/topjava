@@ -24,6 +24,8 @@ public class DateTimeUtil {
         return ldt == null ? "" : ldt.format(DATE_TIME_FORMATTER);
     }
 
+    public static LocalDateTime parseLocalDateTime(String dateTime) {return LocalDateTime.parse(dateTime, DATE_TIME_FORMATTER);}
+
     public static LocalDate parseLocalDate(String str) {
         return StringUtils.isEmpty(str) ? null : LocalDate.parse(str);
     }
