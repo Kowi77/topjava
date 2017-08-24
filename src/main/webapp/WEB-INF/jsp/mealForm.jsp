@@ -6,6 +6,7 @@
 
 
 <html>
+<jsp:include page="fragments/headTag.jsp"/>
 <head>
     <title>Meal</title>
     <link rel="stylesheet" href="css/style.css">
@@ -13,6 +14,7 @@
     <base href="${fn:substring(url, 0, fn:length(url) - fn:length(pageContext.request.requestURI))}${pageContext.request.contextPath}/" />
 </head>
 <body>
+<jsp:include page="fragments/bodyHeader.jsp"/>
 <section>
     <h3><a href="meals">Home</a></h3>
     <h2>${action == 'create' ? 'Create meal' : 'Edit meal'}</h2>
@@ -36,5 +38,6 @@
         <button onclick="window.history.back()" type="button">Cancel</button>
     </form>
 </section>
+<jsp:include page="fragments/footer.jsp"/>
 </body>
 </html>

@@ -5,6 +5,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <html>
+<jsp:include page="fragments/headTag.jsp"/>
 <head>
     <title>Calories management</title>
     <link rel="stylesheet" href="css/style.css">
@@ -13,6 +14,7 @@
     <%--<script>var base = document.getElementsByTagName("base")[0].href;</script>--%>
 </head>
 <body>
+<jsp:include page="fragments/bodyHeader.jsp"/>
 <section>
     <h3>Meals</h3>
     <form method="post" action="meals/filter">
@@ -64,5 +66,6 @@
         </c:forEach>
     </table>
 </section>
+<jsp:include page="fragments/footer.jsp"/>
 </body>
 </html>

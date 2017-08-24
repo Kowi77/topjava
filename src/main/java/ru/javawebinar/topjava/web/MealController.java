@@ -70,7 +70,7 @@ public class MealController {
     }
 
     @RequestMapping(value ="/meals/save", method = RequestMethod.POST)
-    public String saveMeal(HttpServletRequest request, Model model){
+    public String saveMeal(HttpServletRequest request){
         try {
             request.setCharacterEncoding("UTF-8");
         } catch (UnsupportedEncodingException e) {
