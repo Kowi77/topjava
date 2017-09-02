@@ -4,6 +4,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.to.MealWithExceed;
+import ru.javawebinar.topjava.web.json.JsonUtil;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -17,6 +18,7 @@ public class MealRestController extends AbstractMealController {
 
     @Override
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
     public List<MealWithExceed> getAll() {
         return super.getAll();
     }
@@ -35,6 +37,7 @@ public class MealRestController extends AbstractMealController {
 
     @Override
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
     public Meal get(@PathVariable("id") int id) {
         return super.get(id);
     }
@@ -45,12 +48,14 @@ public class MealRestController extends AbstractMealController {
         return super.create(meal);
     }
 
-    @Override
-    @GetMapping(value = "/beetween", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<MealWithExceed> getBetween(@PathVariable("statrDate") LocalDate startDate,
-                                            @PathVariable("startTime") LocalTime startTime,
-                                            @PathVariable("endDate") LocalDate endDate,
-                                            @PathVariable("endTime") LocalTime endTime) {
-        return super.getBetween(startDate, startTime, endDate, endTime);
+    @GetMapping(value = "/between", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<MealWithExceed> getBetween(@RequestParam(name = "startDate", required = false) String startDate,
+                                            @RequestParam(name = "startTime", required = false) String startTime,
+                                            @RequestParam(name = "endDate", required = false) String endDate,
+                                            @RequestParam(name = "endTime", required = false) String endTime) {
+        return super.getBetween(startDate == null ? null : JsonUtil.readValue(startDate, LocalDate.class),
+                                 startTime == null ? null : JsonUtil.readValue(startTime, LocalTime.class),
+                                 endDate == null ? null : JsonUtil.readValue(endDate, LocalDate.class),
+                                 endTime == null ? null : JsonUtil.readValue(endTime, LocalTime.class));
     }
 }
