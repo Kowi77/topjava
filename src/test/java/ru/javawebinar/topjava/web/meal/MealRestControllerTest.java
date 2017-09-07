@@ -40,6 +40,7 @@ public class MealRestControllerTest extends AbstractControllerTest {
         MATCHER_WITH_EXCEED.assertListEquals(expected, actual);
     }
 
+
     @Test
     public void testDelete() throws Exception{
         mockMvc.perform(delete("/rest/meals/" + MEAL4.getId()))
@@ -78,6 +79,7 @@ public class MealRestControllerTest extends AbstractControllerTest {
     @Test
     public void testCreate() throws Exception {
         Meal expected = MealTestData.getCreated();
+        System.out.println(JsonUtil.writeValue(expected));
         mockMvc.perform(post("/rest/meals")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(JsonUtil.writeValue(expected)))

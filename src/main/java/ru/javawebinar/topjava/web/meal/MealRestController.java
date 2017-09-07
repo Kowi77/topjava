@@ -24,7 +24,7 @@ public class MealRestController extends AbstractMealController {
     }
 
     @Override
-    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/{id}")
     public void delete(@PathVariable("id") int id) {
         super.delete(id);
     }
