@@ -20,7 +20,6 @@ function add() {
     $("#detailsForm").find(":input").val("");
     $("#editRow").modal();
 }
-
 function deleteRow(id) {
     $.ajax({
         url: ajaxUrl + id,
@@ -31,7 +30,6 @@ function deleteRow(id) {
         }
     });
 }
-
 function updateTable() {
     $.get(ajaxUrl, function (data) {
         datatableApi.clear().rows.add(data).draw();

@@ -17,9 +17,6 @@ $(function () {
                 "data": "calories"
             },
             {
-                "data": "exceed"
-            },
-            {
                 "defaultContent": "Edit",
                 "orderable": false
             },
