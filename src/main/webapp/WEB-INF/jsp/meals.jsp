@@ -14,32 +14,55 @@
         <div class="container">
             <div class="shadow">
                 <h3><spring:message code="meal.title"/></h3>
-                <div class="view-box">
-                    <form method="post" action="/ajax/meals/filter">
-                        <dl>
-                            <dt><spring:message code="meal.startDate"/>:</dt>
-                            <dd><input type="date" name="startDate" value="${param.startDate}"></dd>
-                        </dl>
-                        <dl>
-                            <dt><spring:message code="meal.endDate"/>:</dt>
-                            <dd><input type="date" name="endDate" value="${param.endDate}"></dd>
-                        </dl>
-                        <dl>
-                            <dt><spring:message code="meal.startTime"/>:</dt>
-                            <dd><input type="time" name="startTime" value="${param.startTime}"></dd>
-                        </dl>
-                        <dl>
-                            <dt><spring:message code="meal.endTime"/>:</dt>
-                            <dd><input type="time" name="endTime" value="${param.endTime}"></dd>
-                        </dl>
-                        <button type="submit"><spring:message code="meal.filter"/></button>
-                    </form>
+
+
+                <div class="container">
+                    <div class="row">
+                        <div class="panel panel-info">
+                            <div class="panel-body">
+                                <form class="form-horizontal" id="filterForm">
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="startDate" class="control-label"><spring:message code="meal.startDate"/>:</label>
+                                                <input type="data" id="startDate" name="startDate" class="form-control" value="${param.startDate}" placeholder="гггг-мм-дд">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="endDate" class="control-label"><spring:message code="meal.endDate"/>:</label>
+                                                <input type="data" id="endDate" name="endDate" class="form-control" value="${param.endDate}" placeholder="гггг-мм-дд">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="startTime" class="control-label"><spring:message code="meal.startTime"/>:</label>
+                                                <input type="time" id="startTime" name="startTime" class="form-control" value="${param.startTime}" placeholder="--:--">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="endTime" class="control-label"><spring:message code="meal.endTime"/>:</label>
+                                                <input type="time" id="endTime" name="endTime" class="form-control" value="${param.endTime}" placeholder="--:--">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="btn-group">
+                                        <button type="submit" class="btn btn-primary pull-right"><spring:message code="meal.filter"/></button>
+                                        <button type="reset" onclick="updateTable()" class="btn btn-primary"><spring:message code="common.cancel"/></button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                     <hr>
                     <a class="btn btn-primary" onclick="add()">
                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                         <spring:message code="common.add"/>
                     </a>
-                    <%-- <a href="meals/create"><spring:message code="meal.add"/></a>--%>
                     <hr>
                     <table class="table table-striped display" id="datatable">
                         <thead>
@@ -47,24 +70,18 @@
                             <th><spring:message code="meal.dateTime"/></th>
                             <th><spring:message code="meal.description"/></th>
                             <th><spring:message code="meal.calories"/></th>
-                            <th colspan="2"><spring:message code="common.actions"/></th>
+                            <th></th>
+                            <th></th>
                         </tr>
                         </thead>
                         <c:forEach items="${meals}" var="meal">
                             <jsp:useBean id="meal" scope="page" type="ru.javawebinar.topjava.to.MealWithExceed"/>
                             <tr class="${meal.exceed ? 'exceeded' : 'normal'}">
-                                <td>
-                                        <%--${meal.dateTime.toLocalDate()} ${meal.dateTime.toLocalTime()}--%>
-                                        <%--<%=TimeUtil.toString(meal.getDateTime())%>--%>
-                                        <%--${fn:replace(meal.dateTime, 'T', ' ')}--%>
-                                        ${fn:formatDateTime(meal.dateTime)}
-                                </td>
+                                <td>${fn:formatDateTime(meal.dateTime)}</td>
                                 <td>${meal.description}</td>
                                 <td>${meal.calories}</td>
                                 <td><a><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></td>
-                                <%--<td><a href="meals/update?id=${meal.id}"><spring:message code="common.update"/></a></td>--%>
                                 <td><a class="delete" id="${meal.id}"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></td>
-                                <%--<td><a href="meals/delete?id=${meal.id}"><spring:message code="common.delete"/></a></td>--%>
                             </tr>
                         </c:forEach>
                     </table>
@@ -102,10 +119,10 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="exceed" class="control-label col-xs-3"><spring:message code="meal.calories"/></label>
+                        <label for="calories" class="control-label col-xs-3"><spring:message code="meal.calories"/></label>
 
                         <div class="col-xs-9">
-                            <input type="boolean" class="form-control" id="exceed" name="exceed" placeholder="<spring:message code="meal.calories"/>">
+                            <input type="boolean" class="form-control" id="calories" name="calories" placeholder="<spring:message code="meal.calories"/>">
                         </div>
                     </div>
 
