@@ -40,3 +40,23 @@ $(function () {
     });
     makeEditable();
 });
+
+$("#datatable").on("click", "#enable", false, function () {
+    var id = $(this).attr("userId");
+    var isEnable;
+    if ($("#enable").is(":checked")){
+        isEnable = "true";
+    }
+    else{
+        isEnable = "false";
+    }
+    $.ajax({
+        type: "POST",
+        url: ajaxUrl + id,
+        data: {"isEnable" : isEnable},
+        success: function () {
+            $(updateTable());
+            successNoty("Update!");
+        }
+    });
+});

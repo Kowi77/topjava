@@ -35,19 +35,21 @@ $(function () {
     makeEditable();
 });
 
-$("#filterForm").submit(function () {
-    var form = $("#filterForm");
-  /*  $.get(ajaxUrl + "filter", {data: form.serialize()}, function (data) {
-        datatableApi.clear().rows.add(data).draw();
-    });*/
-    $.ajax({
-        type: "GET",
-        url: ajaxUrl + "filter",
-        data: form.serialize(),
-        success: function (data) {
-             datatableApi.clear().rows.add(data).draw();
-             successNoty("Filtered");
-             return false;
-        }
+$(document).ready(function () {
+    $("#filterForm").submit(function () {
+        var form = $("#filterForm");
+        /*  $.get(ajaxUrl + "filter", {data: form.serialize()}, function (data) {
+         datatableApi.clear().rows.add(data).draw();
+         });*/
+        $.ajax({
+            type: "GET",
+            url: ajaxUrl + "filter",
+            data: form.serialize(),
+            success: function (data) {
+                datatableApi.clear().rows.add(data).draw();
+                successNoty("Filtered");
+            }
+        });
+        return false;
     });
 });

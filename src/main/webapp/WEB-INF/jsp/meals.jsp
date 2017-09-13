@@ -25,25 +25,25 @@
                                         <div class="col-sm-3">
                                             <div class="form-group">
                                                 <label for="startDate" class="control-label"><spring:message code="meal.startDate"/>:</label>
-                                                <input type="data" id="startDate" name="startDate" class="form-control" value="${param.startDate}" placeholder="гггг-мм-дд">
+                                                <input type="date" id="startDate" name="startDate" class="form-control" value="${param.startDate}">
                                             </div>
                                         </div>
                                         <div class="col-sm-3">
                                             <div class="form-group">
                                                 <label for="endDate" class="control-label"><spring:message code="meal.endDate"/>:</label>
-                                                <input type="data" id="endDate" name="endDate" class="form-control" value="${param.endDate}" placeholder="гггг-мм-дд">
+                                                <input type="date" id="endDate" name="endDate" class="form-control" value="${param.endDate}">
                                             </div>
                                         </div>
                                         <div class="col-sm-3">
                                             <div class="form-group">
                                                 <label for="startTime" class="control-label"><spring:message code="meal.startTime"/>:</label>
-                                                <input type="time" id="startTime" name="startTime" class="form-control" value="${param.startTime}" placeholder="--:--">
+                                                <input type="time" id="startTime" name="startTime" class="form-control" value="${param.startTime}">
                                             </div>
                                         </div>
                                         <div class="col-sm-3">
                                             <div class="form-group">
                                                 <label for="endTime" class="control-label"><spring:message code="meal.endTime"/>:</label>
-                                                <input type="time" id="endTime" name="endTime" class="form-control" value="${param.endTime}" placeholder="--:--">
+                                                <input type="time" id="endTime" name="endTime" class="form-control" value="${param.endTime}">
                                             </div>
                                         </div>
                                     </div>
