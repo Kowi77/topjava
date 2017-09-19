@@ -17,15 +17,11 @@ function add() {
 }
 
 function updateRow(id) {
-    debugger;
     $("#modalTitle").html(i18n["editTitle"]);
-    debugger;
     $.get(ajaxUrl + id, function (data) {
-    debugger;
         $.each(data, function (key, value) {
             form.find("input[name='" + key + "']").val(value);
         });
-        debugger;
         $('#editRow').modal();
     });
 }
