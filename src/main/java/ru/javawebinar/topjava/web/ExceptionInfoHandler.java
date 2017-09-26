@@ -6,10 +6,15 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindException;
+import org.springframework.validation.DataBinder;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import ru.javawebinar.topjava.util.ValidationUtil;
 import ru.javawebinar.topjava.util.exception.ErrorInfo;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
+import ru.javawebinar.topjava.web.json.JsonUtil;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -25,6 +30,21 @@ public class ExceptionInfoHandler {
     public ErrorInfo handleError(HttpServletRequest req, NotFoundException e) {
         return logAndGetErrorInfo(req, e, false);
     }
+
+    @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseBody
+    public ErrorInfo handleArgumentNotValid(HttpServletRequest req, MethodArgumentNotValidException e) {
+        return new ErrorInfo(req.getRequestURL().toString(), "", ValidationUtil.getDetails(e.getBindingResult()));
+    }
+
+    @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY)
+    @ExceptionHandler(BindException.class)
+    @ResponseBody
+    public ErrorInfo handleWrongBind(HttpServletRequest req, BindException e) {
+        return new ErrorInfo(req.getRequestURL().toString(), "", ValidationUtil.getDetails(e.getBindingResult()));
+    }
+
 
     @ResponseStatus(value = HttpStatus.CONFLICT)  // 409
     @ExceptionHandler(DataIntegrityViolationException.class)
