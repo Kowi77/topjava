@@ -85,27 +85,38 @@ public class MealRestControllerTest extends AbstractControllerTest {
     @Test
     public void testCreate() throws Exception {
         Meal created = getCreated();
-        ResultActions action = mockMvc.perform(post(REST_URL)
+        created.setUser(ADMIN);
+        mockMvc.perform(post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(created))
-                .with(userHttpBasic(ADMIN)));
-
-        Meal returned = MATCHER.fromJsonAction(action);
-        created.setId(returned.getId());
-
-        MATCHER.assertEquals(created, returned);
+                .with(userHttpBasic(ADMIN)))
+                .andExpect(status().isOk())
+                .andDo(print());
+        created.setId(ADMIN_MEAL_ID + 2);
         MATCHER.assertListEquals(Arrays.asList(ADMIN_MEAL2, created, ADMIN_MEAL1), service.getAll(ADMIN_ID));
     }
 
     @Test
-    public void testUnvalidCreate() throws Exception {
+    public void testInvalidCreate() throws Exception {
         Meal created = getCreated();
         created.setCalories(1);
-        ResultActions action = mockMvc.perform(post(REST_URL)
+        created.setUser(ADMIN);
+        mockMvc.perform(post(REST_URL)
+                .with(userHttpBasic(ADMIN))
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtil.writeValue(created))
-                .with(userHttpBasic(ADMIN)))
-                .andExpect(status().isUnprocessableEntity());
+                .content(JsonUtil.writeValue(created)))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andDo(print());
+        created.setCalories(300);
+        created.setDescription(null);
+        mockMvc.perform(post(REST_URL)
+                .with(userHttpBasic(ADMIN))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(created)))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andDo(print());
     }
 
     @Test

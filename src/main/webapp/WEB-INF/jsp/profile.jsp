@@ -8,6 +8,25 @@
 
 <body>
 <jsp:include page="fragments/bodyHeader.jsp"/>
+<script>
+    var failedNote;
+
+    function closeNoty() {
+        if (failedNote) {
+            failedNote.close();
+            failedNote = undefined;
+        }
+    }
+    function failNoty(message) {
+     /*    closeNoty();
+        failedNote = new Noty({
+            text: "<span class='glyphicon glyphicon-exclamation-sign'></span> &nbsp;" + message,
+            type: "error",
+            layout: "bottomRight"
+        }).show();*/
+     alert(message);
+    }
+</script>
 
 <div class="jumbotron">
     <div class="container">
@@ -37,6 +56,9 @@
                 </div>
             </div>
         </form:form>
+           <div class="noty"></div>
+            <script>$("${message}"!="" ? failNoty("${message}") : "")</script>
+
     </div>
 </div>
 <jsp:include page="fragments/footer.jsp"/>

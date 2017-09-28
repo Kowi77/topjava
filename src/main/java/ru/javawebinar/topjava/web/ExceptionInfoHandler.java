@@ -1,12 +1,15 @@
 package ru.javawebinar.topjava.web;
 
+import org.postgresql.util.PSQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.method.P;
 import org.springframework.validation.BindException;
 import org.springframework.validation.DataBinder;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -18,7 +21,7 @@ import ru.javawebinar.topjava.web.json.JsonUtil;
 
 import javax.servlet.http.HttpServletRequest;
 
-@ControllerAdvice(annotations = RestController.class)
+@ControllerAdvice(annotations = RestController.class)//, assignableTypes = RootController.class)
 @Order(Ordered.HIGHEST_PRECEDENCE + 5)
 public class ExceptionInfoHandler {
     private static Logger LOG = LoggerFactory.getLogger(ExceptionInfoHandler.class);
@@ -45,12 +48,24 @@ public class ExceptionInfoHandler {
         return new ErrorInfo(req.getRequestURL().toString(), "", ValidationUtil.getDetails(e.getBindingResult()));
     }
 
-
     @ResponseStatus(value = HttpStatus.CONFLICT)  // 409
     @ExceptionHandler(DataIntegrityViolationException.class)
     @ResponseBody
-    public ErrorInfo conflict(HttpServletRequest req, DataIntegrityViolationException e) {
-        return logAndGetErrorInfo(req, e, true);
+    public ErrorInfo handleDataException(HttpServletRequest req, DataIntegrityViolationException e) {
+        String message = "";
+        if (e.getMessage().contains("users_unique_email_idx"))
+            message = "User with this email already exists";
+        return new ErrorInfo(req.getRequestURL().toString(), "", message);
+    }
+
+    @ResponseStatus(value = HttpStatus.CONFLICT)  // 409
+    @ExceptionHandler(DuplicateKeyException.class)
+    @ResponseBody
+    public ErrorInfo handleDuplicateEmailException(HttpServletRequest req, DuplicateKeyException e) {
+        String message = "";
+        if (e.getMessage().contains("users_unique_email_idx"))
+            message = "User with this email already exists";
+        return new ErrorInfo(req.getRequestURL().toString(), "", message);
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
