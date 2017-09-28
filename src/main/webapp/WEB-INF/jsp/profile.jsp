@@ -56,7 +56,6 @@
                 </div>
             </div>
         </form:form>
-           <div class="noty"></div>
             <script>$("${message}"!="" ? failNoty("${message}") : "")</script>
 
     </div>

@@ -18,7 +18,7 @@ public class GlobalControllerExceptionHandler {
     @ExceptionHandler(DuplicateKeyException.class)
     public ModelAndView DuplicateEmailHandler(HttpServletRequest req, DuplicateKeyException e) throws Exception {
         LOG.error("Exception at request " + req.getRequestURL(), e);
-        ModelAndView mav = new ModelAndView(req.getServletPath().replace("/", ""));
+        ModelAndView mav = new ModelAndView("profile");
         mav.addObject("message", "Users whith this email already exist!");
 
         // Interceptor is not invoked, put userTo
